@@ -29,7 +29,16 @@ export class DbService {
         try {
             return DB.getDoc(docId)
         } catch (error) {
-            throw error
+            return error
+        }
+    }
+    async getDocQuery(
+        userId: string
+    ) {
+        try {
+            return DB.listDocs(userId)
+        } catch (error) {
+            return error
         }
     }
 }

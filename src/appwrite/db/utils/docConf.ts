@@ -8,7 +8,7 @@ const collectionId = process.env.APPWRITE_DOC_COLLECTION_ID
 class db {
     client = new Client()
         .setEndpoint(process.env.APPWRITE_ENDPOINT)
-        .setProject(process.env.APPWRITE_PROJECT)
+        .setProject(process.env.APPWRITE_PROJECT_ID)
         .setKey(process.env.APPWRITE_DOC_API_KEY)
     database = new Databases(this.client)
 
@@ -41,10 +41,12 @@ class db {
 
     async getDoc(docId: string) {
         try {
+            console.log('doc id at get', docId);
+
             return this.database.getDocument(dataBaseId, collectionId, docId)
         } catch (error) {
             console.log('error at getting doc', error);
-            throw error
+            return error
         }
     }
 
@@ -57,7 +59,6 @@ class db {
                 collectionId,
                 [
                     Query.equal('userId', userId),
-                    Query.orderAsc('createdAt')
                 ]
             )
         } catch (error) {
