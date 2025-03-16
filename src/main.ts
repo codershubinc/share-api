@@ -1,6 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import * as dotenv from 'dotenv';
+import { NestExpressApplication } from '@nestjs/platform-express';
 dotenv.config();
 
 
@@ -12,7 +13,9 @@ const allowedOrigins = [
 ];
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create<NestExpressApplication>(AppModule, {
+    rawBody: true,
+  });
   // Enable CORS with dynamic origin validation
   app.enableCors({
     origin: (origin, callback) => {
@@ -26,6 +29,7 @@ async function bootstrap() {
     credentials: true,
     allowedHeaders: 'Content-Type,Authorization',
   });
+
 
   const port = process.env.PORT || 3001; // Use environment variable for the port
   await app.listen(port);
