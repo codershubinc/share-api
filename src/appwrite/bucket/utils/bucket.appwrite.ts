@@ -5,13 +5,12 @@ import { promisify } from "util";
 dotenv.config()
 
 const bucketId = process.env.APPWRITE_BUCKET_ID
-const readFileAsync = promisify(fs.readFile);
 
 class bucket {
     client = new Client()
         .setEndpoint(process.env.APPWRITE_ENDPOINT)
         .setProject(process.env.APPWRITE_PROJECT_ID)
-        .setKey(process.env.APPWRITE_BUCKET_API_KEY)
+    // .setKey(process.env.APPWRITE_BUCKET_API_KEY)
 
     storage = new Storage(this.client)
 
@@ -25,15 +24,17 @@ class bucket {
                 throw new Error("Invalid file upload request");
             }
 
-            // ✅ Read file as Buffer (since Multer stored it on disk)
-            const fileStream = fs.createReadStream(file.path);
+            const fileStream = fs
+
+            console.log("File stream created:", fileStream);
+
 
             // ✅ Upload file to Appwrite
             const result = await this.storage.createFile(
                 bucketId,
                 ID.unique(),
                 fileStream as any,
-            );
+            )
 
             console.log("File uploaded:", result);
             return result;
